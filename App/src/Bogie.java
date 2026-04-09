@@ -3,6 +3,14 @@ public class Bogie {
     private int capacity;
     private String cargo;
 
+
+    public Bogie(String type, int capacity) {
+        this.type = type;
+        this.capacity = capacity;
+        this.cargo = ""; // default
+    }
+
+
     public Bogie(String type, int capacity, String cargo) {
         this.type = type;
         this.capacity = capacity;
