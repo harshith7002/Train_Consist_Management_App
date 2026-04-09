@@ -1,20 +1,13 @@
 public class Bogie {
     private String type;
     private int capacity;
-    private String cargo;
 
-
-    public Bogie(String type, int capacity) {
+    public Bogie(String type, int capacity) throws InvalidCapacityException {
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Capacity must be greater than zero");
+        }
         this.type = type;
         this.capacity = capacity;
-        this.cargo = ""; // default
-    }
-
-
-    public Bogie(String type, int capacity, String cargo) {
-        this.type = type;
-        this.capacity = capacity;
-        this.cargo = cargo;
     }
 
     public String getType() {
@@ -23,9 +16,5 @@ public class Bogie {
 
     public int getCapacity() {
         return capacity;
-    }
-
-    public String getCargo() {
-        return cargo;
     }
 }
