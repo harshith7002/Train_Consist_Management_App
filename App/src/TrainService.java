@@ -1,11 +1,10 @@
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TrainService {
 
-    public static List<Bogie> filterHighCapacityBogies(List<Bogie> bogies, int threshold) {
+    public static Map<String, List<Bogie>> groupBogiesByType(List<Bogie> bogies) {
         return bogies.stream()
-                .filter(b -> b.getCapacity() > threshold)
-                .collect(Collectors.toList());
+                .collect(Collectors.groupingBy(Bogie::getType));
     }
 }
