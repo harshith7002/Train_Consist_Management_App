@@ -1,10 +1,10 @@
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class TrainService {
 
-    public static Map<String, List<Bogie>> groupBogiesByType(List<Bogie> bogies) {
+    public static int calculateTotalSeats(List<Bogie> bogies) {
         return bogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getType));
+                .map(Bogie::getCapacity)
+                .reduce(0, Integer::sum);
     }
 }
