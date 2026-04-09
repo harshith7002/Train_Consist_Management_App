@@ -5,49 +5,58 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TrainServiceTest {
 
-    @Test
-    void testSafety_AllBogiesValid() {
-        List<Bogie> list = Arrays.asList(
-                new Bogie("Cylindrical", 100, "Petroleum"),
-                new Bogie("Box", 80, "Coal")
+    private List<Bogie> getSampleBogies() {
+        return Arrays.asList(
+                new Bogie("Sleeper", 72),
+                new Bogie("AC Chair", 60),
+                new Bogie("First Class", 50),
+                new Bogie("General", 90)
         );
-
-        assertTrue(TrainService.isTrainSafe(list));
     }
 
-    @Test
-    void testSafety_CylindricalWithInvalidCargo() {
-        List<Bogie> list = Arrays.asList(
-                new Bogie("Cylindrical", 100, "Coal")
-        );
-
-        assertFalse(TrainService.isTrainSafe(list));
-    }
-
-    @Test
-    void testSafety_NonCylindricalBogiesAllowed() {
-        List<Bogie> list = Arrays.asList(
-                new Bogie("Open", 70, "Grain"),
-                new Bogie("Box", 80, "Coal")
-        );
-
-        assertTrue(TrainService.isTrainSafe(list));
-    }
-
-    @Test
-    void testSafety_MixedBogiesWithViolation() {
-        List<Bogie> list = Arrays.asList(
-                new Bogie("Cylindrical", 100, "Petroleum"),
-                new Bogie("Cylindrical", 90, "Coal")
-        );
-
-        assertFalse(TrainService.isTrainSafe(list));
-    }
-
-    @Test
-    void testSafety_EmptyBogieList() {
+    private List<Bogie> getLargeDataset() {
         List<Bogie> list = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            list.add(new Bogie("Type" + i, i % 100));
+        }
+        return list;
+    }
 
-        assertTrue(TrainService.isTrainSafe(list));
+    @Test
+    void testLoopFilteringLogic() {
+        List<Bogie> result = TrainService.filterUsingLoop(getSampleBogies());
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    void testStreamFilteringLogic() {
+        List<Bogie> result = TrainService.filterUsingStream(getSampleBogies());
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    void testLoopAndStreamResultsMatch() {
+        List<Bogie> loopResult = TrainService.filterUsingLoop(getSampleBogies());
+        List<Bogie> streamResult = TrainService.filterUsingStream(getSampleBogies());
+
+        assertEquals(loopResult.size(), streamResult.size());
+    }
+
+    @Test
+    void testExecutionTimeMeasurement() {
+        long loopTime = TrainService.measureLoopTime(getSampleBogies());
+        long streamTime = TrainService.measureStreamTime(getSampleBogies());
+
+        assertTrue(loopTime > 0);
+        assertTrue(streamTime > 0);
+    }
+
+    @Test
+    void testLargeDatasetProcessing() {
+        List<Bogie> largeData = getLargeDataset();
+
+        List<Bogie> result = TrainService.filterUsingStream(largeData);
+
+        assertNotNull(result);
     }
 }
