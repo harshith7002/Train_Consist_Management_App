@@ -1,7 +1,6 @@
 public class Bogie {
     private String type;
     private int capacity;
-    private String cargo;
 
     public Bogie(String type, int capacity) {
         this.type = type;
@@ -14,13 +13,5 @@ public class Bogie {
 
     public int getCapacity() {
         return capacity;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
     }
 }

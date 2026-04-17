@@ -1,24 +1,22 @@
 public class TrainService {
 
-    public static boolean assignCargo(Bogie bogie, String cargo) {
+    public static int[] bubbleSortCapacities(int[] capacities) {
 
-        try {
-            if (bogie.getType().equalsIgnoreCase("Rectangular")
-                    && cargo.equalsIgnoreCase("Petroleum")) {
+        int n = capacities.length;
 
-                throw new CargoSafetyException(
-                        "Petroleum cannot be assigned to Rectangular bogie");
+        for (int i = 0; i < n - 1; i++) {
+
+            for (int j = 0; j < n - i - 1; j++) {
+
+                if (capacities[j] > capacities[j + 1]) {
+
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+                }
             }
-
-            bogie.setCargo(cargo);
-            return true;
-
-        } catch (CargoSafetyException e) {
-            System.out.println(e.getMessage());
-            return false;
-
-        } finally {
-            System.out.println("Cargo assignment completed.");
         }
+
+        return capacities;
     }
 }
