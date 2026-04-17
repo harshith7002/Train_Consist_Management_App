@@ -1,26 +1,14 @@
-import java.util.Arrays;
-
 public class TrainService {
 
-    public static boolean binarySearchBogieId(String[] bogieIds, String searchKey) {
+    public static boolean searchBogieWithValidation(String[] bogieIds, String searchKey) {
 
-        Arrays.sort(bogieIds); // handles unsorted input
+        if (bogieIds.length == 0) {
+            throw new IllegalStateException("No bogies available for search");
+        }
 
-        int low = 0;
-        int high = bogieIds.length - 1;
-
-        while (low <= high) {
-
-            int mid = (low + high) / 2;
-
-            int compare = searchKey.compareTo(bogieIds[mid]);
-
-            if (compare == 0) {
+        for (String id : bogieIds) {
+            if (id.equals(searchKey)) {
                 return true;
-            } else if (compare < 0) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
             }
         }
 
