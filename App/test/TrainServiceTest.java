@@ -4,85 +4,50 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrainServiceTest {
 
     @Test
-    void testBinarySearch_BogieFound() {
-        String[] ids = {
-                "BG101", "BG205",
-                "BG309", "BG412",
-                "BG550"
-        };
+    void testSearch_ThrowsExceptionWhenEmpty() {
+        String[] ids = {};
 
-        assertTrue(
-                TrainService.binarySearchBogieId(ids, "BG309")
+        Exception ex = assertThrows(
+                IllegalStateException.class,
+                () -> TrainService.searchBogieWithValidation(ids, "BG101")
+        );
+
+        assertEquals("No bogies available for search", ex.getMessage());
+    }
+
+    @Test
+    void testSearch_AllowsSearchWhenDataExists() {
+        String[] ids = {"BG101", "BG205"};
+
+        assertDoesNotThrow(() ->
+                TrainService.searchBogieWithValidation(ids, "BG101")
         );
     }
 
     @Test
-    void testBinarySearch_BogieNotFound() {
-        String[] ids = {
-                "BG101", "BG205",
-                "BG309", "BG412",
-                "BG550"
-        };
+    void testSearch_BogieFoundAfterValidation() {
+        String[] ids = {"BG101", "BG205", "BG309"};
+
+        assertTrue(
+                TrainService.searchBogieWithValidation(ids, "BG205")
+        );
+    }
+
+    @Test
+    void testSearch_BogieNotFoundAfterValidation() {
+        String[] ids = {"BG101", "BG205", "BG309"};
 
         assertFalse(
-                TrainService.binarySearchBogieId(ids, "BG999")
+                TrainService.searchBogieWithValidation(ids, "BG999")
         );
     }
 
     @Test
-    void testBinarySearch_FirstElementMatch() {
-        String[] ids = {
-                "BG101", "BG205",
-                "BG309", "BG412",
-                "BG550"
-        };
-
-        assertTrue(
-                TrainService.binarySearchBogieId(ids, "BG101")
-        );
-    }
-
-    @Test
-    void testBinarySearch_LastElementMatch() {
-        String[] ids = {
-                "BG101", "BG205",
-                "BG309", "BG412",
-                "BG550"
-        };
-
-        assertTrue(
-                TrainService.binarySearchBogieId(ids, "BG550")
-        );
-    }
-
-    @Test
-    void testBinarySearch_SingleElementArray() {
+    void testSearch_SingleElementValidCase() {
         String[] ids = {"BG101"};
 
         assertTrue(
-                TrainService.binarySearchBogieId(ids, "BG101")
-        );
-    }
-
-    @Test
-    void testBinarySearch_EmptyArray() {
-        String[] ids = {};
-
-        assertFalse(
-                TrainService.binarySearchBogieId(ids, "BG101")
-        );
-    }
-
-    @Test
-    void testBinarySearch_UnsortedInputHandled() {
-        String[] ids = {
-                "BG309", "BG101",
-                "BG550", "BG205",
-                "BG412"
-        };
-
-        assertTrue(
-                TrainService.binarySearchBogieId(ids, "BG205")
+                TrainService.searchBogieWithValidation(ids, "BG101")
         );
     }
 }
