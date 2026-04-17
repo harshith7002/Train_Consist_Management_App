@@ -4,41 +4,50 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrainServiceTest {
 
     @Test
-    void testException_ValidCapacityCreation() throws InvalidCapacityException {
-        Bogie b = new Bogie("Sleeper", 72);
-        assertNotNull(b);
+    void testCargo_SafeAssignment() {
+        Bogie b = new Bogie("Cylindrical", 100);
+
+        boolean result = TrainService.assignCargo(b, "Petroleum");
+
+        assertTrue(result);
+        assertEquals("Petroleum", b.getCargo());
     }
 
     @Test
-    void testException_NegativeCapacityThrowsException() {
-        Exception ex = assertThrows(InvalidCapacityException.class, () -> {
-            new Bogie("Sleeper", -10);
-        });
-        assertEquals("Capacity must be greater than zero", ex.getMessage());
+    void testCargo_UnsafeAssignmentHandled() {
+        Bogie b = new Bogie("Rectangular", 80);
+
+        boolean result = TrainService.assignCargo(b, "Petroleum");
+
+        assertFalse(result);
     }
 
     @Test
-    void testException_ZeroCapacityThrowsException() {
-        Exception ex = assertThrows(InvalidCapacityException.class, () -> {
-            new Bogie("Sleeper", 0);
-        });
-        assertEquals("Capacity must be greater than zero", ex.getMessage());
+    void testCargo_CargoNotAssignedAfterFailure() {
+        Bogie b = new Bogie("Rectangular", 80);
+
+        TrainService.assignCargo(b, "Petroleum");
+
+        assertNull(b.getCargo());
     }
 
     @Test
-    void testException_ObjectIntegrityAfterCreation() throws InvalidCapacityException {
-        Bogie b = new Bogie("AC Chair", 60);
+    void testCargo_ProgramContinuesAfterException() {
+        Bogie b1 = new Bogie("Rectangular", 80);
+        Bogie b2 = new Bogie("Cylindrical", 90);
 
-        assertEquals("AC Chair", b.getType());
-        assertEquals(60, b.getCapacity());
+        TrainService.assignCargo(b1, "Petroleum");
+        boolean result = TrainService.assignCargo(b2, "Petroleum");
+
+        assertTrue(result);
     }
 
     @Test
-    void testException_MultipleValidBogiesCreation() throws InvalidCapacityException {
-        Bogie b1 = new Bogie("Sleeper", 72);
-        Bogie b2 = new Bogie("First Class", 50);
+    void testCargo_FinallyBlockExecution() {
+        Bogie b = new Bogie("Rectangular", 80);
 
-        assertNotNull(b1);
-        assertNotNull(b2);
+        boolean result = TrainService.assignCargo(b, "Coal");
+
+        assertTrue(result);
     }
 }
