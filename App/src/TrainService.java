@@ -1,9 +1,13 @@
-import java.util.Arrays;
-
 public class TrainService {
 
-    public static String[] sortBogieNames(String[] bogieNames) {
-        Arrays.sort(bogieNames);
-        return bogieNames;
+    public static boolean linearSearchBogieId(String[] bogieIds, String searchKey) {
+
+        for (String id : bogieIds) {
+            if (id.equals(searchKey)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
