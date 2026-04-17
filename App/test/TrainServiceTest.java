@@ -4,50 +4,47 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrainServiceTest {
 
     @Test
-    void testCargo_SafeAssignment() {
-        Bogie b = new Bogie("Cylindrical", 100);
+    void testSort_BasicSorting() {
+        int[] input = {72, 56, 24, 70, 60};
+        int[] expected = {24, 56, 60, 70, 72};
 
-        boolean result = TrainService.assignCargo(b, "Petroleum");
-
-        assertTrue(result);
-        assertEquals("Petroleum", b.getCargo());
+        assertArrayEquals(expected,
+                TrainService.bubbleSortCapacities(input));
     }
 
     @Test
-    void testCargo_UnsafeAssignmentHandled() {
-        Bogie b = new Bogie("Rectangular", 80);
+    void testSort_AlreadySortedArray() {
+        int[] input = {24, 56, 60, 70, 72};
+        int[] expected = {24, 56, 60, 70, 72};
 
-        boolean result = TrainService.assignCargo(b, "Petroleum");
-
-        assertFalse(result);
+        assertArrayEquals(expected,
+                TrainService.bubbleSortCapacities(input));
     }
 
     @Test
-    void testCargo_CargoNotAssignedAfterFailure() {
-        Bogie b = new Bogie("Rectangular", 80);
+    void testSort_DuplicateValues() {
+        int[] input = {72, 56, 56, 24};
+        int[] expected = {24, 56, 56, 72};
 
-        TrainService.assignCargo(b, "Petroleum");
-
-        assertNull(b.getCargo());
+        assertArrayEquals(expected,
+                TrainService.bubbleSortCapacities(input));
     }
 
     @Test
-    void testCargo_ProgramContinuesAfterException() {
-        Bogie b1 = new Bogie("Rectangular", 80);
-        Bogie b2 = new Bogie("Cylindrical", 90);
+    void testSort_SingleElementArray() {
+        int[] input = {50};
+        int[] expected = {50};
 
-        TrainService.assignCargo(b1, "Petroleum");
-        boolean result = TrainService.assignCargo(b2, "Petroleum");
-
-        assertTrue(result);
+        assertArrayEquals(expected,
+                TrainService.bubbleSortCapacities(input));
     }
 
     @Test
-    void testCargo_FinallyBlockExecution() {
-        Bogie b = new Bogie("Rectangular", 80);
+    void testSort_AllEqualValues() {
+        int[] input = {40, 40, 40};
+        int[] expected = {40, 40, 40};
 
-        boolean result = TrainService.assignCargo(b, "Coal");
-
-        assertTrue(result);
+        assertArrayEquals(expected,
+                TrainService.bubbleSortCapacities(input));
     }
 }
